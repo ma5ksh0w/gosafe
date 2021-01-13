@@ -1,20 +1,20 @@
-package gosafe_test
+package panics_test
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/ma5ksh0w/gosafe"
+	"github.com/ma5ksh0w/panics"
 )
 
 func TestFailed(t *testing.T) {
-	if gosafe.Failed(func() {
+	if panics.Failed(func() {
 		fmt.Println("no panic, must be false")
 	}) {
 		t.Fatal("Failed func with no panic")
 	}
 
-	if !gosafe.Failed(func() {
+	if !panics.Failed(func() {
 		panic("this is a panic")
 	}) {
 		t.Fatal("Failed func returns true")
@@ -22,13 +22,13 @@ func TestFailed(t *testing.T) {
 }
 
 func TestAsError(t *testing.T) {
-	if err := gosafe.AsError(func() {
+	if err := panics.AsError(func() {
 		fmt.Println("no panic, no error")
 	}); err != nil {
 		t.Fatal("No panic func returns error:", err)
 	}
 
-	err := gosafe.AsError(func() {
+	err := panics.AsError(func() {
 		panic("this is a panic")
 	})
 
@@ -40,14 +40,14 @@ func TestAsError(t *testing.T) {
 }
 
 func TestCatch(t *testing.T) {
-	gosafe.Catch(func() {
+	panics.Catch(func() {
 		fmt.Println("no panic, no error")
 	}, func(e interface{}) {
 		t.Fatal("Catch called callback with no panic, e:", e)
 	})
 
 	called := false
-	gosafe.Catch(func() {
+	panics.Catch(func() {
 		panic("must be catched")
 	}, func(e interface{}) {
 		called = true
@@ -83,15 +83,15 @@ func TestCatchCh(t *testing.T) {
 		}
 	}()
 
-	gosafe.CatchCh(func() {
+	panics.CatchCh(func() {
 		fmt.Println("no panic, no error")
 	}, pCh)
 
-	gosafe.CatchCh(func() {
+	panics.CatchCh(func() {
 		panic("panic #1")
 	}, pCh)
 
-	gosafe.CatchCh(func() {
+	panics.CatchCh(func() {
 		panic("panic #2")
 	}, pCh)
 
@@ -108,7 +108,7 @@ func TestCatchCh(t *testing.T) {
 }
 
 func TestIgnore(t *testing.T) {
-	gosafe.Ignore(func() {
+	panics.Ignore(func() {
 		panic("must be ignored")
 	})
 }

@@ -1,4 +1,4 @@
-package gosafe
+package panics
 
 import "fmt"
 
